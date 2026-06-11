@@ -410,6 +410,7 @@
   const WINS = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
   let board = Array(9).fill(null);
+  let nextStarter = 'X';
   let current = 'X';
   let scores = { X: 0, O: 0, D: 0 };
   let gameOver = false;
@@ -468,6 +469,7 @@
       setTimeout(() => winCard.classList.remove('celebrating'), 1200);
       cardX.className = 'player-card';
       cardO.className = 'player-card';
+      nextStarter = current === 'X' ? 'O' : 'X';
     } else if (board.every(Boolean)) {
       gameOver = true;
       scores.D++;
@@ -475,6 +477,7 @@
       setStatus("It's a draw!", 'draw');
       cardX.className = 'player-card';
       cardO.className = 'player-card';
+      nextStarter = nextStarter === 'X' ? 'O' : 'X';
     } else {
       current = current === 'X' ? 'O' : 'X';
       const name = current === 'X' ? 'Player 1' : 'Player 2';
@@ -485,13 +488,14 @@
 
   function newGame() {
     board = Array(9).fill(null);
-    current = 'X';
+    current = nextStarter;
     gameOver = false;
     cells.forEach(c => {
       c.className = 'cell';
       c.querySelector('.cell-mark').textContent = '';
     });
-    setStatus("Player 1's turn", 'x');
+    const name = current === 'X' ? 'Player 1' : 'Player 2';
+    setStatus(name + "'s turn", current.toLowerCase());
     updateCards();
   }
 
@@ -500,6 +504,7 @@
     scoreX.textContent = 0;
     scoreO.textContent = 0;
     drawsEl.textContent = 0;
+    nextStarter = 'X';
     newGame();
   }
 
